@@ -2,26 +2,46 @@
 include 'db.php';
 session_start();
 
+function generateCaptchaString($length = 5) {
+    $characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+    $charactersLength = strlen($characters);
+    $randomString = '';
+    for ($i = 0; $i < $length; $i++) {
+        $randomString .= $characters[rand(0, $charactersLength - 1)];
+    }
+    return $randomString;
+}
+
+// Mengatur ulang CAPTCHA setiap kali halaman dimuat ulang
+if ($_SERVER["REQUEST_METHOD"] == "GET") {
+    $_SESSION['captcha'] = generateCaptchaString();
+}
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $username = $_POST['username'];
-    $password = $_POST['password'];
-
-    $stmt = $pdo->prepare("SELECT * FROM users WHERE username = ?");
-    $stmt->execute([$username]);
-    $user = $stmt->fetch();
-
-    if ($user && password_verify($password, $user['password'])) {
-        $_SESSION['loggedin'] = true;
-        $_SESSION['username'] = $user['username'];
-        $_SESSION['role'] = $user['role'];
-
-        if ($user['role'] == 'Admin') {
-            header("Location: admin.php");
-        } else {
-            header("Location: user.php");
-        }
+    $captcha_input = $_POST['captcha'];
+    if (strtolower($captcha_input) !== strtolower($_SESSION['captcha'])) {
+        $error_message = "Invalid CAPTCHA!";
     } else {
-        $error_message = "Invalid login!";
+        $username = $_POST['username'];
+        $password = $_POST['password'];
+
+        $stmt = $pdo->prepare("SELECT * FROM users WHERE username = ?");
+        $stmt->execute([$username]);
+        $user = $stmt->fetch();
+
+        if ($user && password_verify($password, $user['password'])) {
+            $_SESSION['loggedin'] = true;
+            $_SESSION['username'] = $user['username'];
+            $_SESSION['role'] = $user['role'];
+
+            if ($user['role'] == 'Admin') {
+                header("Location: admin.php");
+            } else {
+                header("Location: user.php");
+            }
+        } else {
+            $error_message = "Invalid login!";
+        }
     }
 }
 ?>
@@ -58,6 +78,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <div class="form-group">
                 <label for="password">Password:</label>
                 <input type="password" class="form-control" id="password" name="password" required>
+            </div>
+            <div class="form-group">
+                <label for="captcha">Enter the text below:</label>
+                <p><strong><?php echo $_SESSION['captcha']; ?></strong></p>
+                <input type="text" class="form-control" id="captcha" name="captcha" required>
             </div>
             <button type="submit" class="btn btn-primary">Login</button>
         </form>
