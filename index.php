@@ -390,7 +390,7 @@ include 'db.php';
         <a href="#menu" class="menu-link">Look at our menu</a>
     </div>
 
-    <div class="container">
+    <div class="container" data-aos="fade-up">
     <div id="carouselExample" class="carousel slide" data-ride="carousel" data-interval="5000" data-wrap="true">
         <div class="carousel-inner">
             <div class="carousel-item active">
