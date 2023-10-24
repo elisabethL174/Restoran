@@ -33,6 +33,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION['loggedin'] = true;
             $_SESSION['username'] = $user['username'];
             $_SESSION['role'] = $user['role'];
+            $_SESSION['first_name'] = $user['first_name']; // tambahkan baris ini
+            $_SESSION['last_name'] = $user['last_name'];   // tambahkan baris ini
+
 
             if ($user['role'] == 'Admin') {
                 header("Location: admin.php");
