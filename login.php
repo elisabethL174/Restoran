@@ -12,6 +12,7 @@ function generateCaptchaString($length = 5) {
     return $randomString;
 }
 
+// Mengatur ulang CAPTCHA setiap kali halaman dimuat ulang
 if ($_SERVER["REQUEST_METHOD"] == "GET") {
     $_SESSION['captcha'] = generateCaptchaString();
 }
@@ -32,8 +33,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION['loggedin'] = true;
             $_SESSION['username'] = $user['username'];
             $_SESSION['role'] = $user['role'];
-            $_SESSION['first_name'] = $user['first_name']; 
-            $_SESSION['last_name'] = $user['last_name'];   
+            $_SESSION['first_name'] = $user['first_name']; // tambahkan baris ini
+            $_SESSION['last_name'] = $user['last_name'];   // tambahkan baris ini
 
             if ($user['role'] == 'Admin') {
                 header("Location: admin.php");
@@ -128,7 +129,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <ul class="navbar-nav ml-auto">
 
                     <li class="nav-item">
-                        <a class="nav-link" href="Register.php">Register</a>
+                        <a class="nav-link" href="register.php">Register</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="login.php">Login</a>
