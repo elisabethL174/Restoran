@@ -1,3 +1,7 @@
+<?php
+include 'db.php';
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -323,10 +327,30 @@
     opacity: 1;
 }
 
+.menu-alert {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 20px;
+            background-color: white;
+            border: 2px solid black;
+            z-index: 1000;
+            text-align: center;
+        }
+
+        .menu-alert-content {
+            color: black;
+        }
+
 
     </style>
+
+
 </head>
 <body>
+
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <a class="navbar-brand" href="home_page.php">El Munchero</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -380,7 +404,9 @@
         </div>
         <div class="col-md-6">
             <div class="description-box">
-                <p>Keterangan untuk Gambar Kiri 1</p>
+                <h3>"Our Special Ramen Collection!"</h3>
+                <p>Indulge in a symphony of flavors with our exquisite Special Ramen lineup. Each bowl is a culinary masterpiece, meticulously crafted to captivate your senses. From savory broths to premium ingredients, our ramen is a celebration of taste and tradition. Dive into a world of unique combinations, personalized toppings, and a visual feast that transcends the ordinary. Join us on a journey of culinary exploration where every bowl tells a story leaves you craving more.</p>
+ 
             </div>
         </div>
     </div>
@@ -391,7 +417,8 @@
         </div>
         <div class="col-md-6 order-md-1">
             <div class="description-box">
-                <p>Keterangan untuk Gambar Kanan 1</p>
+                <h3>"Savor the Perfect Harmony Sandwich Collection!"</h3>
+                <p>Elevate your sandwich experience with our meticulously crafted Egg, Cheese, and Ham Sandwiches.  Delight in the perfect marriage of creamy cheese, fluffy eggs, and savory ham, nestled between layers of freshly baked bread. Each bite is a symphony of textures and flavors, creating a mouthwatering fusion that transcends the ordinary sandwich.</p>
             </div>
         </div>
     </div>
@@ -422,22 +449,23 @@
 
             while ($row = $result->fetch_assoc()) {
                 echo '<div class="col-md-4 menu-card" data-aos="fade-up" data-row="' . $row_counter . '">';
-                echo '<div class="menu-item" data-toggle="modal" data-target="#menuModal">';
+                echo '<div class="menu-item" onclick="showMenuDetails(\'' . $row['name'] . '\', \'' . $row['description'] . '\', ' . $row['price'] . ')">';
                 echo '<img src="' . $row['image_path'] . '" class="img-fluid" alt="' . $row['name'] . '">';
                 echo '<div class="menu-item-content">';
                 echo '<h3 class="menu-item-title">' . $row['name'] . '</h3>';
                 echo '</div>';
                 echo '</div>';
                 echo '</div>';
-
+            
                 // Check if it's the last item in the row
                 if ($row_counter % 3 == 0) {
                     echo '<script>equalizeHeights(' . $row_counter . ')</script>';
                 }
-
+            
                 // Increase the row counter
                 $row_counter++;
             }
+            
 
         // Menutup koneksi ke database
         $conn->close();
@@ -445,24 +473,9 @@
     </div>
 </div>
 
-<!-- Modal -->
-<div class="modal fade" id="menuModal" tabindex="-1" role="dialog" aria-labelledby="menuModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="menuModalLabel">Menu Detail</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <h4 id="modal-name"></h4>
-                <p id="modal-description"></p>
-                <p id="modal-price"></p>
-            </div>
-        </div>
+<div id="menuAlert" class="menu-alert">
+        <span id="menuAlertContent" class="menu-alert-content"></span>
     </div>
-</div>
 
 <div class="white-thingy">
 
@@ -521,6 +534,25 @@
         });
     }
 </script>
+
+<script>
+    function showMenuDetails(name, description, price) {
+        // Menampilkan alert dengan informasi menu
+        var alertContent = "Menu Details:<br><br>Name: " + name + "<br>Description: " + description + "<br>Price: Rp. " + parseFloat(price).toFixed(2);
+
+        // Menetapkan konten alert
+        document.getElementById('menuAlertContent').innerHTML = alertContent;
+
+        // Menampilkan alert
+        document.getElementById('menuAlert').style.display = 'block';
+
+        // Menutup alert setelah 5 detik
+        setTimeout(function () {
+            document.getElementById('menuAlert').style.display = 'none';
+        }, 5000); // Ubah angka 5000 menjadi jumlah milidetik yang diinginkan
+    }
+</script>
+
 
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
