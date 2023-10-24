@@ -5,12 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css">
+    <link href="https://fonts.googleapis.com/css2?family=Lobster&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
 
     <title>Halaman Index</title>
 
     <style>
-        body {
+       body {
             background-color: black;
             margin: 0;
             padding: 0;
@@ -36,8 +37,10 @@
             text-decoration: none;
         }
         .navlink:hover {
-            color: #fff; /* Hover color */
+            color: #fff; 
             font-weight: bold;
+            text-decoration: none;
+
         }
         #main-container {
             position: relative;
@@ -76,6 +79,46 @@
             height: 300px; /* Adjust this height based on your needs */
             object-fit: cover;
         }
+        .foodimg-container {
+    position: relative;
+    width: 100vw;
+    height: 48vw;
+    margin-bottom: 5vw;
+}
+
+.foodimg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 75%;
+}
+
+.menu-link {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    text-decoration: none;
+    font-size: 5vw;
+    font-family: 'Lobster', cursive;
+}
+
+.menu-link:hover {
+    transform: translate(-50%, -50%) scale(1.1);
+    text-decoration: none;
+    color: white;
+}
+
+
+.menu-item img {
+    width: 100%;
+    height: auto;
+    max-width: 200px; /* Sesuaikan dengan ukuran yang Anda inginkan */
+    max-height: 150px; /* Sesuaikan dengan ukuran yang Anda inginkan */
+    object-fit: cover;
+}
+
     </style>
 </head>
 <body>
@@ -85,6 +128,11 @@
             <a href="login.php" class="navlink">Login</a>
             <a href="register.php" class="navlink">Register</a>
         </div>
+    </div>
+
+    <div class="foodimg-container">
+        <img src="img/a1.jpg" class="foodimg">
+        <a href="#menu" class="menu-link">Look at our menu</a>
     </div>
 
     <div class="container">
@@ -130,6 +178,78 @@
             </div>
         </div>
     </div>
+
+
+    <div class="container" id="menu">
+    <h2>Our Menu</h2>
+    <div class="row">
+        <?php
+        // Koneksi ke database (Ganti dengan informasi Anda)
+        $servername = "localhost";
+        $username = "root";
+        $password = "";
+        $dbname = "restoran";
+
+        $conn = new mysqli($servername, $username, $password, $dbname);
+
+        if ($conn->connect_error) {
+            die("Koneksi ke database gagal: " . $conn->connect_error);
+        }
+
+        // Query untuk mengambil data menu
+        $sql = "SELECT * FROM menu";
+        $result = $conn->query($sql);
+
+        while ($row = $result->fetch_assoc()) {
+            echo '<div class="col-md-4" data-aos="fade-up">';
+            echo '<div class="menu-item" data-toggle="modal" data-target="#menuModal">';
+            echo '<img src="' . $row['image_path'] . '" class="img-fluid" alt="' . $row['name'] . '">';
+            echo '</div>';
+            echo '</div>';
+        }
+        
+
+        // Menutup koneksi ke database
+        $conn->close();
+        ?>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="menuModal" tabindex="-1" role="dialog" aria-labelledby="menuModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="menuModalLabel">Menu Detail</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <h4 id="modal-name"></h4>
+                <p id="modal-description"></p>
+                <p id="modal-price"></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    function showDetails(name, description, price, imagePath) {
+        const modal = document.getElementById('menuModal');
+        const modalName = modal.querySelector('#modal-name');
+        const modalDescription = modal.querySelector('#modal-description');
+        const modalPrice = modal.querySelector('#modal-price');
+        modalName.textContent = name;
+        modalDescription.textContent = description;
+        modalPrice.textContent = 'Price: Rp. ' + parseFloat(price).toFixed(2);
+        modalImage.src = imagePath;
+
+        $('#menuModal').modal('show');
+    }
+</script>
+
 
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
