@@ -101,7 +101,7 @@ include 'db.php';
     opacity: 75%;
 }
 
-.menu-link {
+.title {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -112,9 +112,25 @@ include 'db.php';
     font-family: 'Lobster', cursive;
 }
 
-.menu-link:hover {
+.title:hover {
     transform: translate(-50%, -50%) scale(1.1);
     text-decoration: none;
+    color: white;
+}
+
+.menu-link {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, 100%);
+    color: white;
+    font-size: 1.5vw;
+    font-family: 'Lobster', cursive;
+    text-decoration: underline;
+}
+
+.menu-link:hover {
+    transform: translate(-50%, 100%) scale(1.1);
     color: white;
 }
 
@@ -352,7 +368,7 @@ include 'db.php';
 <body>
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <a class="navbar-brand" href="home_page.php">El Munchero</a>
+        <a class="navbar-brand" href="index.php">El Munchero</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -370,6 +386,7 @@ include 'db.php';
 
     <div class="foodimg-container">
         <img src="img/a1.png" class="foodimg">
+        <a href="#" class="title">El Munchero</a>
         <a href="#menu" class="menu-link">Look at our menu</a>
     </div>
 

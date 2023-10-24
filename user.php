@@ -160,6 +160,16 @@ if ($result->num_rows > 0) {
         margin-bottom: 0px;
     }
 
+    .btn.btn-warning {
+            transition: 0.3s;
+        }
+
+        .btn.btn-warning:hover {
+            background-color: #9E8300;
+            border-color: #9E8300;
+            transition: 0.3s;
+        }
+
 
 </style>
 </head>
@@ -197,7 +207,7 @@ if ($result->num_rows > 0) {
                     <img src="<?php echo $menu['image_path']; ?>" class="card-img-top mx-auto mt-2"
                         alt="<?php echo $menu['name']; ?>">
                     <div class="card-img-overlay">
-                        <button class="btn btn-primary btn-sm"
+                        <button class="btn btn-warning btn-sm"
                         onclick="showDetails('<?php echo $menu['name']; ?>', 'Harga: Rp. <?php echo number_format($menu['price'], 2); ?>', '<?php echo $menu['description']; ?>', '<?php echo $menu['id']; ?>')">Detail</button>
                         <div class="form-check mt-2">
                             <input class="form-check-input" type="checkbox" name="selectedMenu"
@@ -212,8 +222,8 @@ if ($result->num_rows > 0) {
             </div>
             <?php endforeach; ?>
         </div>
-        <div class="mt-5 mb-5 col-12">
-            <button class="btn btn-success" onclick="submitOrder()">Beli</button>
+        <div class="mt-5 mb-5 col-12 text-center">
+            <button class="btn btn-warning btn-lg" onclick="submitOrder" style="width: 200px; margin: 0 auto;">Beli</button>
         </div>
     </div>
 </div>
