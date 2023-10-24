@@ -8,7 +8,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
     $birthDate = $_POST['birth_date'];
     $gender = $_POST['gender'];
-    $role = $_POST['role']; // Get the selected role from the form
+    $role = $_POST['role']; 
 
     $stmt = $pdo->prepare("INSERT INTO users (first_name, last_name, username, password, birth_date, gender, role) VALUES (?, ?, ?, ?, ?, ?, ?)");
     $stmt->execute([$firstName, $lastName, $username, $password, $birthDate, $gender, $role]);
@@ -50,7 +50,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         justify-content: center;
         align-items: center;
         background-color: rgba(0, 0, 0, 0.5);
-        /*height: calc(100vh - 56px); /* Assuming the navbar's height is 56px, adjust as needed */
         padding-top: 100px;
         padding-bottom: 50px;
     }

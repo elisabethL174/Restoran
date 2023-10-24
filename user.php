@@ -2,7 +2,6 @@
 include 'db2.php';
 session_start();
 
-// Query to fetch all menu items from the database
 $sql = "SELECT * FROM menu";
 $result = $conn->query($sql);
 $menus = [];
@@ -25,7 +24,6 @@ if ($result->num_rows > 0) {
     <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 
-    <!-- CSS Styles -->
     <style>
     body {
         background-image: url("img/le_menu.png");
@@ -71,7 +69,6 @@ if ($result->num_rows > 0) {
         transition: 0.3s;
     }
 
-    /* Additional styling for buttons */
     .btn {
         background-color: #FFD700;
         color: #1B2631;
@@ -82,7 +79,6 @@ if ($result->num_rows > 0) {
         color: #1B2631;
     }
 
-    /* Additional styling for card titles */
     .card-title {
         color: #FFD700;
         height: 3rem;
@@ -134,8 +130,8 @@ if ($result->num_rows > 0) {
         background: white;
         padding: 20px;
         border-radius: 8px;
-        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2); /* Tambahkan bayangan agar lebih terlihat */
-        text-align: center; /* Tengahkan teks dalam alert */
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2); 
+        text-align: center;
     }
     #purchaseAlert {
     display: none;
@@ -153,7 +149,7 @@ if ($result->num_rows > 0) {
 
 .card-title {
         color: #FFD700;
-        height: 3rem; /* Set a fixed height for the card title */
+        height: 3rem; 
     }
 
     .card-body {
@@ -223,7 +219,7 @@ if ($result->num_rows > 0) {
             <?php endforeach; ?>
         </div>
         <div class="mt-5 mb-5 col-12 text-center">
-            <button class="btn btn-warning btn-lg" onclick="submitOrder()" style="width: 200px; margin: 0 auto;">Beli</button>
+        <button class="btn btn-warning btn-lg" onclick="submitOrder()" style="width: 200px; margin: 0 auto;">Beli</button>
         </div>
     </div>
 </div>
@@ -253,7 +249,7 @@ if ($result->num_rows > 0) {
 <script>
     AOS.init();
 
-    let selectedItemsInfo = []; // Deklarasi variabel di sini
+    let selectedItemsInfo = []; 
 
     function showDetails(name, price, desc, id) {
         document.getElementById('alertTitle').textContent = name;
@@ -261,14 +257,11 @@ if ($result->num_rows > 0) {
         document.getElementById('alertPrice').textContent = price;
         document.getElementById('customAlert').style.display = 'block';
 
-        // Periksa apakah item ini sudah ada di selectedItemsInfo
         let itemIndex = selectedItemsInfo.findIndex(item => item.id === id);
 
         if (itemIndex !== -1) {
-            // Jika item sudah ada, perbarui informasinya
             selectedItemsInfo[itemIndex].price = parseFloat(price.replace('Harga: Rp. ', '').replace(',', ''));
         } else {
-            // Jika item belum ada, tambahkan item baru
             selectedItemsInfo.push({
                 id: id,
                 name: name,
@@ -288,7 +281,6 @@ function showPurchaseAlert(title, description) {
     document.getElementById('purchaseDescription').textContent = description;
     document.getElementById('purchaseAlert').style.display = 'block';
 
-    // Opsi untuk menutup alert setelah beberapa detik
     setTimeout(function() {
         closePurchaseAlert();
     }, 7000);
@@ -314,7 +306,6 @@ function submitOrder() {
     alertMessage += `\nTotal Harga: Rp. ${totalHarga.toLocaleString('id-ID')}`;
     showPurchaseAlert("Konfirmasi Pembelian", alertMessage);
 
-    // Mengosongkan selectedItemsInfo setelah menghitung total harga
     selectedItemsInfo = [];
 }
 </script>

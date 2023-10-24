@@ -1,7 +1,5 @@
 <?php
-include 'db.php'; // Ensure db.php includes the database connection
-
-// Define the directory where you want to store the uploaded images
+include 'db.php'; 
 $imageDirectory = 'Menu/';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -9,16 +7,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $price = $_POST['price'];
     $description = $_POST['description'];
 
-    // Handle image upload
     $imagePath = $imageDirectory . basename($_FILES["image"]["name"]);
     move_uploaded_file($_FILES["image"]["tmp_name"], $imagePath);
-
-    // Note: You might want to add additional validation and security checks for file uploads.
 
     $stmt = $pdo->prepare("INSERT INTO menu (name, price, description, image_path) VALUES (?, ?, ?, ?)");
     $stmt->execute([$name, $price, $description, $imagePath]);
 
-    // Redirect to the admin page after adding a menu item
     header("Location: admin.php");
     exit;
 }

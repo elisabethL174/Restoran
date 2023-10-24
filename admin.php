@@ -1,5 +1,5 @@
 <?php
-include 'db.php'; // Ensure db.php includes a database connection
+include 'db.php'; 
 session_start();
 
 if (!isset($_SESSION['loggedin']) || $_SESSION['role'] != 'Admin') {
@@ -7,22 +7,18 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['role'] != 'Admin') {
     exit;
 }
 
-// Handle delete action
 if (isset($_GET['action']) && $_GET['action'] == 'delete' && isset($_GET['id'])) {
     $id = $_GET['id'];
 
-    // Fetch menu item details for the confirmation modal
     $stmt = $pdo->prepare("SELECT * FROM menu WHERE id = ?");
     $stmt->execute([$id]);
     $menu = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if (!$menu) {
-        // Redirect if the menu item with the specified ID is not found
         header("Location: admin.php");
         exit;
     }
 
-    // Display a confirmation modal
     echo "
     <script>
         if (confirm('Are you sure you want to delete this menu item?')) {
@@ -34,7 +30,6 @@ if (isset($_GET['action']) && $_GET['action'] == 'delete' && isset($_GET['id']))
     exit;
 }
 
-// Handle confirmed delete action
 if (isset($_GET['action']) && $_GET['action'] == 'confirmedDelete' && isset($_GET['id'])) {
     $id = $_GET['id'];
     $stmt = $pdo->prepare("DELETE FROM menu WHERE id = ?");
@@ -50,7 +45,6 @@ if (isset($_GET['action']) && $_GET['action'] == 'confirmedDelete' && isset($_GE
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Panel - Your Restaurant Name</title>
-    <!-- Bootstrap CSS link -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
         .navbar-brand {
@@ -260,7 +254,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'confirmedDelete' && isset($_GE
         }
 
         .action-button {
-            width: 48%; /* Adjust the width as needed, leaving a small gap for spacing */
+            width: 48%;
         }
     </style>
 </head>
@@ -300,16 +294,13 @@ if (isset($_GET['action']) && $_GET['action'] == 'confirmedDelete' && isset($_GE
             </thead>
             <tbody>
                 <?php
-                // Fetch menu items from the database and display them in the table
                 $stmt = $pdo->prepare("SELECT * FROM menu");
                 $stmt->execute();
                 $menus = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-                // Define a variable to toggle background colors
                 $evenRow = true;
 
                 foreach ($menus as $menu) {
-                    // Use the $evenRow variable to toggle between background colors
                     $rowClass = $evenRow ? 'even-row' : 'odd-row';
                     echo "<tr class='$rowClass'>";
                     echo "<td class='text'>{$menu['id']}</td>";
@@ -325,7 +316,6 @@ if (isset($_GET['action']) && $_GET['action'] == 'confirmedDelete' && isset($_GE
                     echo "</td>";
                     echo "</tr>";
                 
-                    // Toggle the $evenRow variable for the next row
                     $evenRow = !$evenRow;
                 }
                 ?>
@@ -333,8 +323,6 @@ if (isset($_GET['action']) && $_GET['action'] == 'confirmedDelete' && isset($_GE
         </table>
         <a class="btn btn-success" href="add_menu.php">Add Menu</a>
     </div>
-
-    <!-- Bootstrap JS and Popper.js scripts (place them at the end of the body) -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.7/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>

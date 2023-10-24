@@ -553,19 +553,15 @@ include 'db.php';
 
 <script>
     function showMenuDetails(name, description, price) {
-        // Menampilkan alert dengan informasi menu
         var alertContent = "Menu Details:<br><br>Name: " + name + "<br>Description: " + description + "<br>Price: Rp. " + parseFloat(price).toFixed(2);
 
-        // Menetapkan konten alert
         document.getElementById('menuAlertContent').innerHTML = alertContent;
 
-        // Menampilkan alert
         document.getElementById('menuAlert').style.display = 'block';
 
-        // Menutup alert setelah 5 detik
         setTimeout(function () {
             document.getElementById('menuAlert').style.display = 'none';
-        }, 5000); // Ubah angka 5000 menjadi jumlah milidetik yang diinginkan
+        }, 5000); 
     }
 </script>
 
