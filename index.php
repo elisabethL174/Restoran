@@ -386,8 +386,7 @@ include 'db.php';
 
     <div class="foodimg-container">
         <img src="img/a1.png" class="foodimg">
-        <a href="#" class="title">El Munchero</a>
-        <a href="#menu" class="menu-link">Look at our menu</a>
+        <a href="#menu" class="title">El Munchero</a>
     </div>
 
     <div class="container" data-aos="fade-up">
