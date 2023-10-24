@@ -56,6 +56,7 @@ if ($result->num_rows > 0) {
         width: auto;
         max-height: 100%;
         text-align: center;
+        border-radius: 10px;
     }
 
     .navbar-brand {
@@ -107,6 +108,7 @@ if ($result->num_rows > 0) {
         flex-direction: column;
         flex-grow: 1;
         background-color: #333345;
+        background-image: url("img/paper.jpg");
     }
 
     .card {
@@ -114,6 +116,14 @@ if ($result->num_rows > 0) {
         padding: 10px;
         background-image: url("img/wood.jpg");
         border-radius: 10px;
+    }
+
+    .your_name {
+        justify-content: center;
+    }
+
+    .name {
+        color: white;
     }
 </style>
 </head>
@@ -127,6 +137,9 @@ if ($result->num_rows > 0) {
         <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
+        <div class="your_name">
+            <span class="text-center name">Welcome, <?php echo $_SESSION['first_name'] . ' ' . $_SESSION['last_name']; ?></span>
+        </div>
         <ul class="navbar-nav ml-auto">
             <li class="nav-item">
                 <a class="nav-link" href="logout.php">Logout</a>
@@ -163,7 +176,7 @@ if ($result->num_rows > 0) {
             </div>
             <?php endforeach; ?>
         </div>
-        <div class="mt-5">
+        <div class="mt-5 mb-5 col-12">
             <button class="btn btn-success" onclick="submitOrder()">Beli</button>
         </div>
     </div>
