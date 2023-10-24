@@ -219,6 +219,7 @@ if ($result->num_rows > 0) {
             <?php endforeach; ?>
         </div>
         <div class="mt-5 mb-5 col-12 text-center">
+            <p><i>"Klik button Detail terlebih dahulu sebelum mencentang pesanan"</i></p>
         <button class="btn btn-warning btn-lg" onclick="submitOrder()" style="width: 200px; margin: 0 auto;">Beli</button>
         </div>
     </div>
