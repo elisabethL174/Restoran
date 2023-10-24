@@ -125,6 +125,34 @@ if ($result->num_rows > 0) {
     .name {
         color: white;
     }
+    #customAlert {
+        display: none;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 1000;
+        background: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2); /* Tambahkan bayangan agar lebih terlihat */
+        text-align: center; /* Tengahkan teks dalam alert */
+    }
+    #purchaseAlert {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+    background: white;
+    padding:2vw;
+    border-radius: 8px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+    text-align: center;
+}
+
+
 </style>
 </head>
 
@@ -162,7 +190,7 @@ if ($result->num_rows > 0) {
                         alt="<?php echo $menu['name']; ?>">
                     <div class="card-img-overlay">
                         <button class="btn btn-primary btn-sm"
-                            onclick="showDetails('<?php echo $menu['name']; ?>', 'Harga: Rp. <?php echo number_format($menu['price'], 2); ?>', '<?php echo $menu['description']; ?>')">Detail</button>
+                        onclick="showDetails('<?php echo $menu['name']; ?>', 'Harga: Rp. <?php echo number_format($menu['price'], 2); ?>', '<?php echo $menu['description']; ?>', '<?php echo $menu['id']; ?>')">Detail</button>
                         <div class="form-check mt-2">
                             <input class="form-check-input" type="checkbox" name="selectedMenu"
                                 value="<?php echo $menu['id']; ?>" id="MenuID<?php echo $menu['id']; ?>">
@@ -182,13 +210,20 @@ if ($result->num_rows > 0) {
     </div>
 </div>
 
-<div id="customAlert"
-    style="display:none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 1000; background: white; padding: 20px; border-radius: 8px;">
-    <h2 id="alertTitle"></h2>
-    <p id="alertDescription"></p>
-    <p id="alertPrice"></p>
-    <button onclick="closeAlert()">Close</button>
+
+<div id="customAlert" style="display:none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 1000; background: white; padding: 20px; border-radius: 8px;">
+        <h2 id="alertTitle"></h2>
+        <p id="alertDescription"></p>
+        <p id="alertPrice"></p>
+        <button onclick="closeAlert()">Close</button>
+    </div>
+    
+    <div id="purchaseAlert" style="display:none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 1000; background: white; padding: 20px; border-radius: 8px; box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2); text-align: center;">
+        <h2 id="purchaseTitle"></h2>
+        <p id="purchaseDescription"></p>
+    <button onclick="closePurchaseAlert()">Close</button>
 </div>
+
 
 
 
@@ -200,42 +235,70 @@ if ($result->num_rows > 0) {
 <script>
     AOS.init();
 
-    function showDetails(name, price, desc) {
-    document.getElementById('alertTitle').textContent = name;
-    document.getElementById('alertDescription').textContent = desc;
-    document.getElementById('alertPrice').textContent = price;
-    document.getElementById('customAlert').style.display = 'block';
-}
+    let selectedItemsInfo = []; // Deklarasi variabel di sini
 
-function closeAlert() {
+    function showDetails(name, price, desc, id) {
+        document.getElementById('alertTitle').textContent = name;
+        document.getElementById('alertDescription').textContent = desc;
+        document.getElementById('alertPrice').textContent = price;
+        document.getElementById('customAlert').style.display = 'block';
+
+        // Periksa apakah item ini sudah ada di selectedItemsInfo
+        let itemIndex = selectedItemsInfo.findIndex(item => item.id === id);
+
+        if (itemIndex !== -1) {
+            // Jika item sudah ada, perbarui informasinya
+            selectedItemsInfo[itemIndex].price = parseFloat(price.replace('Harga: Rp. ', '').replace(',', ''));
+        } else {
+            // Jika item belum ada, tambahkan item baru
+            selectedItemsInfo.push({
+                id: id,
+                name: name,
+                price: parseFloat(price.replace('Harga: Rp. ', '').replace(',', ''))
+            });
+        }
+        setTimeout(function() {
+            closeAlert();
+        }, 5000);
+    }
+    function closeAlert() {
     document.getElementById('customAlert').style.display = 'none';
 }
 
-    function submitOrder() {
-        let selectedItems = document.querySelectorAll('input[name="selectedMenu"]:checked');
-        let selectedIds = [];
-        
-        selectedItems.forEach(item => {
-            selectedIds.push(item.value);
-        });
-        
-        // Kirim ke server
-        fetch('submit_order.php', {
-            method: 'POST',
-            body: JSON.stringify(selectedIds),
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                alert('Order berhasil!');
-            } else {
-                alert('Terjadi kesalahan.');
-            }
-        });
-    }
+function showPurchaseAlert(title, description) {
+    document.getElementById('purchaseTitle').textContent = title;
+    document.getElementById('purchaseDescription').textContent = description;
+    document.getElementById('purchaseAlert').style.display = 'block';
+
+    // Opsi untuk menutup alert setelah beberapa detik
+    setTimeout(function() {
+        closePurchaseAlert();
+    }, 7000);
+}
+
+function closePurchaseAlert() {
+    document.getElementById('purchaseAlert').style.display = 'none';
+}
+
+function submitOrder() {
+    let selectedItems = document.querySelectorAll('input[name="selectedMenu"]:checked');
+    let alertMessage = "Item yang telah dibeli:\n";
+
+    selectedItems.forEach(item => {
+        let selectedItem = selectedItemsInfo.find(info => info.id === item.value);
+        if (selectedItem) {
+            alertMessage += `- ${selectedItem.name}: Rp. ${selectedItem.price.toLocaleString('id-ID')}\n`;
+        }
+    });
+
+    let totalHarga = selectedItemsInfo.reduce((total, item) => total + item.price, 0);
+
+    alertMessage += `\nTotal Harga: Rp. ${totalHarga.toLocaleString('id-ID')}`;
+    showPurchaseAlert("Konfirmasi Pembelian", alertMessage);
+
+    // Mengosongkan selectedItemsInfo setelah menghitung total harga
+    selectedItemsInfo = [];
+}
 </script>
 </body>
 

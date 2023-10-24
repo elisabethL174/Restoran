@@ -35,7 +35,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Check if a new image file is uploaded
     if ($_FILES["image"]["size"] > 0) {
         // Define the directory where you want to store the uploaded images
-        $imageDirectory = 'menu_images/';
+        $imageDirectory = 'Menu/';
 
         // Handle image upload
         $imagePath = $imageDirectory . basename($_FILES["image"]["name"]);
