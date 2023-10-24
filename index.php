@@ -13,10 +13,11 @@
 
     <style>
        body {
-            background-color: black;
+        background: linear-gradient(to bottom, #333345, #000000);
             margin: 0;
             padding: 0;
             color: white;
+            overflow-x: hidden;
         }
         .container2 {
             text-align: center;
@@ -210,42 +211,59 @@
 }
 
 .menu-text {
-            margin: 2.5vw auto;
-            padding: 1vw 4vw;
-            background-color: #ffcc29; /* Golden color */
-            color: #000;
-            font-weight: bold;
-            border-radius: 50vw; /* Circle shape */
-            font-size: 24px;
-            text-align: center;
-            z-index: 2;
-            transition: 0.3s;
-            text-shadow: 0 0 20px rgba(255, 204, 41, 0.5); /* Text shadow */
-            box-shadow: 0 0 20px rgba(255, 204, 41, 0.5); /* Box shadow */
-            display: inline-block;
-            text-decoration: none;
-        }
-        .menu-text:hover {
-            background-color: #fff;
-            color: #ffcc29;
-            transition: 0.3s;
-        }
-
-        .description-box {
-            background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent black background */
-            padding: 20px;
-            border-radius: 5px;
-            color: #fff;
-            font-size: 16px;
-        }
-
-        .menu-item {
+    margin: 2.5vw auto;
+    padding: 1vw 4vw;
+    background-color: #ffcc29; /* Golden color */
+    color: #000;
+    font-weight: bold;
+    border-radius: 50vw; /* Circle shape */
+    font-size: 24px;
+    text-align: center;
+    z-index: 2;
+    transition: 0.3s;
+    text-shadow: 0 0 20px rgba(255, 204, 41, 0.5); /* Text shadow */
+    box-shadow: 0 0 20px rgba(255, 204, 41, 0.5); /* Box shadow */
+    display: inline-block;
+    text-decoration: none;
+}
+.menu-text:hover {
     background-color: #fff;
+    color: #ffcc29;
+    transition: 0.3s;
+    text-decoration: none;
+}
+
+.description-box {
+    background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent black background */
+    padding: 20px;
+    border-radius: 5px;
+    color: #fff;
+    font-size: 16px;
+}
+
+.menu-item {
+    background-image: url("img/woods.jpg");
     border-radius: 10px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     overflow: hidden;
     margin: 20px;
     transition: transform 0.2s;
+    width: 100%; /* To make each item take the full width of its container */
+}
+
+.menu-item-title {
+    color: #FFCC29;
+    height: 3rem;
+    overflow: hidden;
+    text-shadow: rgba(0, 0, 0, 0.7);
+    font-size: 24px;
+    margin: 0;
+}
+
+.menu-items {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
 }
 
 .menu-item:hover {
@@ -262,12 +280,6 @@
 .menu-item-content {
     padding: 20px;
     text-align: center;
-}
-
-.menu-item-title {
-    font-size: 24px;
-    margin: 0;
-    color: #333;
 }
 
 .menu-item-description {
@@ -289,6 +301,13 @@
     display: block;
     margin: 0 auto; /* Center the image horizontally */
     margin-top: 30px;
+}
+
+.menu-items-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: stretch; /* Ensure all items have the same height */
 }
 
 .carousel .carousel-inner {
@@ -379,8 +398,8 @@
 </div>
 
 <div class="container" id="menu">
-    <h2 class="text-center" style="color: #ffcc29; font-size: 36px; margin-bottom: 30px;">Our Menu</h2>
-    <div class="row menu-items">
+        <h2 class="text-center" style="color: #ffcc29; font-size: 36px; margin-bottom: 30px;">Our Menu</h2>
+        <div class="row menu-items">
         <?php
         // Koneksi ke database (Ganti dengan informasi Anda)
         $servername = "localhost";
@@ -398,18 +417,27 @@
         $sql = "SELECT * FROM menu";
         $result = $conn->query($sql);
 
-        while ($row = $result->fetch_assoc()) {
-            echo '<div class="col-md-4" data-aos="fade-up">';
-            echo '<div class="menu-item" data-toggle="modal" data-target="#menuModal">';
-            echo '<img src="' . $row['image_path'] . '" class="img-fluid" alt="' . $row['name'] . '">';
-            echo '<div class="menu-item-content">';
-            echo '<h3 class="menu-item-title">' . $row['name'] . '</h3>';
-            echo '<p class="menu-item-description">' . $row['description'] . '</p>';
-            echo '<p class="menu-item-price">Price: Rp. ' . number_format($row['price'], 2) . '</p>';
-            echo '</div>';
-            echo '</div>';
-            echo '</div>';
-        }
+            // Add a counter for the row
+            $row_counter = 1;
+
+            while ($row = $result->fetch_assoc()) {
+                echo '<div class="col-md-4 menu-card" data-aos="fade-up" data-row="' . $row_counter . '">';
+                echo '<div class="menu-item" data-toggle="modal" data-target="#menuModal">';
+                echo '<img src="' . $row['image_path'] . '" class="img-fluid" alt="' . $row['name'] . '">';
+                echo '<div class="menu-item-content">';
+                echo '<h3 class="menu-item-title">' . $row['name'] . '</h3>';
+                echo '</div>';
+                echo '</div>';
+                echo '</div>';
+
+                // Check if it's the last item in the row
+                if ($row_counter % 3 == 0) {
+                    echo '<script>equalizeHeights(' . $row_counter . ')</script>';
+                }
+
+                // Increase the row counter
+                $row_counter++;
+            }
 
         // Menutup koneksi ke database
         $conn->close();
@@ -444,21 +472,21 @@
 
             <div class="white-box-container-again">
                 <div class="white-box">
-                    <img src="img/eoa.png" class="wbimg">
+                    <img src="img/spork.png" class="wbimg">
                 </div>
-                <p class="guh">Ease of<br>Use<p>
+                <p class="guh">Exquisite<br>Cuisines<p>
             </div>
             <div class="white-box-container-again">
                 <div class="white-box">
-                    <img src="img/idk.png" class="wbimg">
+                    <img src="img/money.png" class="wbimg">
                 </div>
-                <p class="guh">Simple<br>Features<p>
+                <p class="guh">Reasonable<br>Prices<p>
             </div>
             <div class="white-box-container-again">
                 <div class="white-box">
-                    <img src="img/eyedropper.png" class="wbimg">
+                    <img src="img/platter.png" class="wbimg">
                 </div>
-            <p class="guh">Clear<br>Visuals<p>
+            <p class="guh">Impeccable<br>Service<p>
         </div>
     </div>
 </div>
@@ -478,6 +506,19 @@
         modalImage.src = imagePath;
 
         $('#menuModal').modal('show');
+    }
+
+    function equalizeHeights(row) {
+        var cardsInRow = document.querySelectorAll('.menu-card[data-row="' + row + '"]');
+        var maxHeight = 0;
+
+        cardsInRow.forEach(function (card) {
+            maxHeight = Math.max(maxHeight, card.clientHeight);
+        });
+
+        cardsInRow.forEach(function (card) {
+            card.style.height = maxHeight + 'px';
+        });
     }
 </script>
 

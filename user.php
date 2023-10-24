@@ -107,15 +107,14 @@ if ($result->num_rows > 0) {
         align-items: center;
         flex-direction: column;
         flex-grow: 1;
-        background-color: #333345;
-        background-image: url("img/paper.jpg");
+        background: linear-gradient(to bottom, #333345, #000000);
     }
 
     .card {
-        /*background-image: #604E42;*/
         padding: 10px;
-        background-image: url("img/wood.jpg");
+        background-image: url("img/woods.jpg");
         border-radius: 10px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.8);
     }
 
     .your_name {
@@ -151,6 +150,15 @@ if ($result->num_rows > 0) {
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
     text-align: center;
 }
+
+.card-title {
+        color: #FFD700;
+        height: 3rem; /* Set a fixed height for the card title */
+    }
+
+    .card-body {
+        margin-bottom: 0px;
+    }
 
 
 </style>
